@@ -8,7 +8,7 @@ class GPIOFake(object):
     pass
 
 import RPi.GPIO as GPIO
-g = None
+current_press = None
 
 try:
   GPIO.setmode(GPIO.BCM)
@@ -68,10 +68,9 @@ html = """
 <body style="padding-top: 20px">
   <div class="container">
     <div class="row">
-      <img src="http://placehold.it/500x500"
-    </div>
-    <div class="row">
-      <div class="col-md-offset-3 col-md-6">
+      <div class="col-md-offset-2 col-md-9">
+	<img id="stream" src="http://10.66.10.3/mjpg/video.mjpg" width="640" height="480" border="0" alt="If no image is displayed, there might be too many viewers, or the browser configuration may have to be changed. See help for detailed instructions on how to do this.">
+	<!-- <iframe src="http://10.66.10.3" height="600" width="800"></iframe> -->
         <button class="btn-lg btn-block btn-danger">Let em in</button>
       </div>
     </div>
@@ -98,10 +97,12 @@ def websocket():
     try:
       message = wsock.receive()
       if message == "unlock":
-        if g is not None:
+	print g
+        if current_press is not None:
+	  print "inside"
           g.kill()
         unlock_door()
-        g = gevent.spawn_later(5, lock_door)
+        current_press = gevent.spawn_later(5, lock_door)
       elif message == "lock":
         lock_door()
       wsock.send("Your message was: %r" % message)
@@ -110,5 +111,5 @@ def websocket():
 
 from gevent.pywsgi import WSGIServer
 from geventwebsocket import WebSocketHandler, WebSocketError
-server = WSGIServer(("0.0.0.0", 8080), app, handler_class=WebSocketHandler)
+server = WSGIServer(("0.0.0.0", 80), app, handler_class=WebSocketHandler)
 server.serve_forever()
