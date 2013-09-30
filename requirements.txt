@@ -1,0 +1,4 @@
+gevent-websocket
+gevent
+bottle
+RPi.GPIO
