@@ -1,0 +1,4 @@
+#!/bin/sh
+
+kill `cat /home/pi/door_buzzer/buzzer.pid`
+rm /home/pi/door_buzzer/buzzer.pid

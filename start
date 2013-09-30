@@ -1,0 +1,4 @@
+#!/bin/sh
+
+python /home/pi/door_buzzer/door_buzzer.py &
+echo $! > /home/pi/door_buzzer/buzzer.pid
