@@ -110,6 +110,6 @@ def websocket():
     except WebSocketError:
       break
 
-if __name___ == "__main__":
+if __name__ == "__main__":
   server = WSGIServer(("0.0.0.0", 80), app, handler_class=WebSocketHandler)
   server.serve_forever()
