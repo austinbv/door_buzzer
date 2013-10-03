@@ -1,0 +1,20 @@
+#!/bin/bash
+
+export PID_FILE=/var/run/buzzer.pid
+
+case $1 in
+  start)
+    echo "Starting Door Buzzer"
+    python /home/pi/door_buzzer/door_buzzer.py &
+    echo $! > $PID_FILE
+    ;;
+  stop)
+    kill `cat $PID_FILE` ;;
+  *)
+    echo "Stopping buzzer"
+    echo "usage: buzzer {start|stop}"
+    exit 1
+    ;;
+
+esac
+exit 0

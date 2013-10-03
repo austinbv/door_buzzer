@@ -1,5 +1,9 @@
+#! /usr/bin/env python
+
 from bottle import  Bottle, template, request
 from gevent import Timeout
+from gevent.pywsgi import WSGIServer
+from geventwebsocket import WebSocketHandler, WebSocketError
 import gevent
 
 class GPIOFake(object):
@@ -49,7 +53,7 @@ html = """
     .container {
       text-align: center;
     }
-     
+
     .container:before {
       content: '';
       display: inline-block;
@@ -69,8 +73,7 @@ html = """
   <div class="container">
     <div class="row">
       <div class="col-md-offset-2 col-md-9">
-	<img id="stream" src="http://10.66.10.3/mjpg/video.mjpg" width="640" height="480" border="0" alt="If no image is displayed, there might be too many viewers, or the browser configuration may have to be changed. See help for detailed instructions on how to do this.">
-	<!-- <iframe src="http://10.66.10.3" height="600" width="800"></iframe> -->
+        <img id="stream" src="http://10.66.10.3/mjpg/video.mjpg" width="640" height="480" border="0" alt="If no image is displayed, there might be too many viewers, or the browser configuration may have to be changed. See help for detailed instructions on how to do this.">
         <button class="btn-lg btn-block btn-danger">Let em in</button>
       </div>
     </div>
@@ -97,9 +100,7 @@ def websocket():
     try:
       message = wsock.receive()
       if message == "unlock":
-	print g
         if current_press is not None:
-	  print "inside"
           g.kill()
         unlock_door()
         current_press = gevent.spawn_later(5, lock_door)
@@ -109,7 +110,6 @@ def websocket():
     except WebSocketError:
       break
 
-from gevent.pywsgi import WSGIServer
-from geventwebsocket import WebSocketHandler, WebSocketError
-server = WSGIServer(("0.0.0.0", 80), app, handler_class=WebSocketHandler)
-server.serve_forever()
+if __name___ == "__main__":
+  server = WSGIServer(("0.0.0.0", 80), app, handler_class=WebSocketHandler)
+  server.serve_forever()
