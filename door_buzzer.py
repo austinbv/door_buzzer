@@ -94,14 +94,14 @@ def hello():
 
 @app.route('/websocket')
 def websocket():
-  global g
+  global current_press
   wsock = request.environ.get('wsgi.websocket')
   while True:
     try:
       message = wsock.receive()
       if message == "unlock":
         if current_press is not None:
-          g.kill()
+          current_press.kill()
         unlock_door()
         current_press = gevent.spawn_later(5, lock_door)
       elif message == "lock":
