@@ -42,10 +42,18 @@ html = """
 
       $('button').mouseup(function(){
         ws.send("lock");
+        $(this).addClass('btn-danger').removeClass('btn-success');
+        $('#lock').addClass('locked');
       });
 
       $('button').mousedown(function(){
         ws.send("unlock");
+        $('#lock').removeClass('locked');
+        $(this).removeClass('btn-danger').addClass('btn-success');
+      });
+
+      $("#lock").load('lock.svg',function(response){
+        $(this).addClass("locked");
       });
     });
   </script>
@@ -67,6 +75,27 @@ html = """
       vertical-align: middle;
       width: 100%;
     }
+
+    button.btn-lg {
+      outline: 0;
+      font-size: 72px;
+    }
+
+    #lock {
+      width: 100px;
+      height: 70px;
+      display: inline-block;
+    }
+
+    #lock #bar {
+      -webkit-transform: rotateY(0deg);
+      -webkit-transform-origin: 85% 60%;
+      -webkit-transition: -webkit-transform 0.5s;
+    }
+
+    #lock.locked #bar {
+      -webkit-transform: rotateY(180deg);
+    }
   </style>
 </head>
 <body style="padding-top: 20px">
@@ -74,7 +103,10 @@ html = """
     <div class="row">
       <div class="col-md-offset-2 col-md-9">
         <img id="stream" src="http://10.66.10.3/mjpg/video.mjpg" width="640" height="480" border="0" alt="If no image is displayed, there might be too many viewers, or the browser configuration may have to be changed. See help for detailed instructions on how to do this.">
-        <button class="btn-lg btn-block btn-danger">Let em in</button>
+        <button class="btn-lg btn-block btn-danger">
+          Let em in
+          <div id="lock"></div>
+        </button>
       </div>
     </div>
   </div>
