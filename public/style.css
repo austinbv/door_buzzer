@@ -1,0 +1,38 @@
+.container {
+  text-align: center;
+}
+
+.container:before {
+  content: '';
+  display: inline-block;
+  height: 100%;
+  vertical-align: middle;
+  margin-right: -0.25em;
+}
+
+.row {
+  display: inline-block;
+  vertical-align: middle;
+  width: 100%;
+}
+
+button.btn-lg {
+  outline: 0;
+  font-size: 72px;
+}
+
+#lock {
+  width: 100px;
+  height: 70px;
+  display: inline-block;
+}
+
+#lock #bar {
+  -webkit-transform: rotateY(0deg);
+  -webkit-transform-origin: 85% 60%;
+  -webkit-transition: -webkit-transform 0.5s;
+}
+
+#lock.locked #bar {
+  -webkit-transform: rotateY(180deg);
+}
