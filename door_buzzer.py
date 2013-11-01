@@ -146,7 +146,7 @@ def websocket():
 
 @app.route('/public/<path:path>')
 def callback(path):
-    return static_file(path, 'public')
+    return static_file(path, '%s/../public' % os.path.abspath(__file__))
 
 if __name__ == "__main__":
   port = int(os.environ.get('PORT', 80))
