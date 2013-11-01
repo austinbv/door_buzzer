@@ -53,8 +53,9 @@ html = """
         $(this).removeClass('btn-danger').addClass('btn-success');
       });
 
-      $("#lock").load('lock.svg',function(response){
-        $(this).addClass("locked");
+      $("#lock").load('/public/lock.svg',function(){
+        var that = this;
+        setTimeout(function(){$(that).addClass("locked");} ,0)
       });
     });
   </script>
