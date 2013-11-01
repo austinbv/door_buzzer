@@ -1,6 +1,7 @@
 #! /usr/bin/env python
+import os
 
-from bottle import  Bottle, template, request
+from bottle import  Bottle, template, request, static_file
 from gevent import Timeout
 from gevent.pywsgi import WSGIServer
 from geventwebsocket import WebSocketHandler, WebSocketError
@@ -11,10 +12,10 @@ class GPIOFake(object):
   def output(*args):
     pass
 
-import RPi.GPIO as GPIO
 current_press = None
 
 try:
+  import RPi.GPIO as GPIO
   GPIO.setmode(GPIO.BCM)
   GPIO.setup(23, GPIO.OUT)
 except:
@@ -27,7 +28,7 @@ html = """
 <head>
   <title>Open Me!</title>
   <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet">
-  <script src="//code.jquery.com/jquery-2.0.3.min.js"></script>
+  <script src="/public/zepto.js"></script>
   <script type="text/javascript">
     $(function() {
       var ws = new WebSocket("ws://" + window.location.host + "/websocket");
@@ -110,6 +111,11 @@ def websocket():
     except WebSocketError:
       break
 
+@app.route('/public/<path:path>')
+def callback(path):
+    return static_file(path, 'public')
+
 if __name__ == "__main__":
-  server = WSGIServer(("0.0.0.0", 80), app, handler_class=WebSocketHandler)
+  port = int(os.environ.get('PORT', 80))
+  server = WSGIServer(("0.0.0.0", port), app, handler_class=WebSocketHandler)
   server.serve_forever()
